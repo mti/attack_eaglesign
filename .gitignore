@@ -1,0 +1,11 @@
+*.swp
+*~
+*.so
+eaglesign_ref/PQgenKAT_sign3
+eaglesign_ref/PQgenKAT_sign5
+eaglesign_ref/test/test_attack_eaglesign3
+eaglesign_ref/test/test_attack_eaglesign5
+eaglesign_ref/test/test_eaglesign3
+eaglesign_ref/test/test_eaglesign5
+eaglesign_ref/test/test_speed3
+eaglesign_ref/test/test_speed5
