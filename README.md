@@ -31,9 +31,13 @@ make
   efficient version will be provided later.
 
 * For parameter set EagleSign-5, G is actually a 2×2 matrix, and this
-  code recovers the top left entry for simplicity. The other entries can
-  be recovered in exactly the same way by adjusting which entry of Z and
-  C we average out.
+  code recovers the top left entry for simplicity's sake. The other
+  entries can be recovered in exactly the same way by adjusting which
+  entry of Z and C we consider.
+
+* The source files `aes256ctr.c` and `aes256ctr.h` are missing from the
+  EagleSign submission package. They are copied over from the round 3
+  submission package of Dilithium.
 
 —Mehdi Tibouchi, July 19, 2023.
 
