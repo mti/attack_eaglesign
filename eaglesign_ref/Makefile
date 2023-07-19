@@ -1,5 +1,5 @@
 CC ?= /usr/bin/cc
-CFLAGS += 
+CFLAGS += -Ofast -march=native -Wall
 NISTFLAGS += 
 SOURCES = sign.c packing.c polyvec.c poly.c ntt.c reduce.c polymatrix.c
 HEADERS = config.h params.h api.h sign.h packing.h polymatrix.h polyvec.h poly.h ntt.h \
@@ -10,6 +10,8 @@ KECCAK_HEADERS = $(HEADERS) fips202.h
 .PHONY: all speed shared clean
 
 all: \
+  test/test_attack_eaglesign3 \
+  test/test_attack_eaglesign5 \
   test/test_eaglesign3 \
   test/test_eaglesign5 \
   PQgenKAT_sign3 \
@@ -26,6 +28,8 @@ kats: \
   PQgenKAT_sign5 \
 
 tests: \
+  test/test_attack_eaglesign3 \
+  test/test_attack_eaglesign5 \
   test/test_eaglesign3 \
   test/test_eaglesign5 \
   test/test_vectors3 \
@@ -54,6 +58,16 @@ libpq_eaglesign3_ref.so: $(SOURCES) $(HEADERS) symmetric-shake.c
 libpq_eaglesign5_ref.so: $(SOURCES) $(HEADERS) symmetric-shake.c
 	$(CC) -shared -fPIC $(CFLAGS) -DEAGLESIGN_MODE=5 \
 	  -o $@ $(SOURCES) symmetric-shake.c
+
+test/test_attack_eaglesign3: test/test_attack.c randombytes.c $(KECCAK_SOURCES) \
+  $(KECCAK_HEADERS)
+	$(CC) $(CFLAGS) -DEAGLESIGN_MODE=3 \
+	  -o $@ $< randombytes.c $(KECCAK_SOURCES) -lm
+
+test/test_attack_eaglesign5: test/test_attack.c randombytes.c $(KECCAK_SOURCES) \
+  $(KECCAK_HEADERS)
+	$(CC) $(CFLAGS) -DEAGLESIGN_MODE=5 \
+	  -o $@ $< randombytes.c $(KECCAK_SOURCES) -lm
 
 test/test_eaglesign3: test/test_eaglesign.c randombytes.c $(KECCAK_SOURCES) \
   $(KECCAK_HEADERS)
@@ -104,6 +118,8 @@ clean:
 	rm -f libpq_eaglesign5_ref.so
 	rm -f libpq_fips202_ref.so
 	rm -f libpq_aes256ctr_ref.so
+	rm -f test/test_attack_eaglesign3
+	rm -f test/test_attack_eaglesign5
 	rm -f test/test_eaglesign3
 	rm -f test/test_eaglesign5
 	rm -f test/test_vectors3
